@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTable, useFilters, useSortBy, usePagination } from 'react-table'
+import { useTable, useFilters, useSortBy, usePagination, useBlockLayout, useResizeColumns } from 'react-table'
 import DefaultColumnFilter from './DefaultColumnFilter'
 import { fuzzyTextFilterFn } from '../utils/filterUtils'
 import Pagination from './Pagination'
@@ -29,6 +29,9 @@ const Table = ({ columns, data }) => {
     const defaultColumn = React.useMemo(
         () => ({
             Filter: DefaultColumnFilter,
+            minWidth: 20,
+            width: 250,
+            maxWidth: 500,
         }),
         []
     )
@@ -58,22 +61,13 @@ const Table = ({ columns, data }) => {
         },
         useFilters,
         useSortBy,
-        usePagination
+        usePagination,
+        useBlockLayout,
+        useResizeColumns
     )
 
     return (
         <>
-            <div>
-                <pre>
-                    <code>{JSON.stringify(
-                        pageIndex,
-                        pageSize,
-                        pageCount,
-                        canNextPage,
-                        canPreviousPage)}
-                    </code>
-                </pre>
-            </div>
             <table {...getTableProps()}>
                 <thead>
                     {headerGroups.map(headerGroup => (
@@ -82,6 +76,9 @@ const Table = ({ columns, data }) => {
                                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                                     {column.render('Header')}
                                     {/* Render the columns filter UI */}
+                                    <div
+                                        {...column.getResizerProps()} className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                                    />
                                     <div>{column.canFilter ? column.render('Filter') : null}</div>
                                     <span>
                                         {column.isSorted
@@ -114,10 +111,6 @@ const Table = ({ columns, data }) => {
             </table>
             <br />
             <Pagination previousPage={previousPage} nextPage={nextPage} pageCount={pageCount} canNextPage={canNextPage} pageIndex={pageIndex} pageOptions={pageOptions} gotoPage={gotoPage} pageSize={pageSize} setPageSize={setPageSize} canPreviousPage={canPreviousPage} />
-
-
-
-
         </>
     )
 }

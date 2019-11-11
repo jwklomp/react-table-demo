@@ -14,6 +14,7 @@ const Styles = styled.div`
   padding: 1rem;
 
   table {
+    display: inline-block;
     border-spacing: 0;
     border: 1px solid black;
 
@@ -35,6 +36,23 @@ const Styles = styled.div`
       :last-child {
         border-right: 0;
       }
+
+      .resizer {
+        display: inline-block;
+        background: grey;
+        width: 5px;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translateX(50%);
+        z-index: 1;
+
+        &.isResizing {
+          background: red;
+        }
+      }
+
     }
   }
   
@@ -98,7 +116,10 @@ function App() {
 
   return (
     <Styles>
+      <>
+      <h1>Demo of React Table</h1>
       <Table columns={columns} data={data} />
+      </>
     </Styles>
   )
 }
