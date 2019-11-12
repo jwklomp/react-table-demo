@@ -17,10 +17,12 @@ const initialColumnDefinition = [
         Header: 'First Name',
         accessor: 'firstName',
         show: true,
+        order: 1
       },
       {
         Header: 'Last Name',
         show: true,
+        order: 2,
         accessor: 'lastName',
         // Use our custom `fuzzyText` filter on this column
         filter: 'fuzzyText',
@@ -35,6 +37,7 @@ const initialColumnDefinition = [
         Header: 'Age',
         accessor: 'age',
         show: true,
+        order: 3,
         Filter: SliderColumnFilter,
         filter: 'equals',
       },
@@ -42,6 +45,7 @@ const initialColumnDefinition = [
         Header: 'Visits',
         accessor: 'visits',
         show: true,
+        order: 4,
         Filter: NumberRangeColumnFilter,
         filter: 'between',
       },
@@ -49,6 +53,7 @@ const initialColumnDefinition = [
         Header: 'Status',
         accessor: 'status',
         show: true,
+        order: 5,
         Filter: SelectColumnFilter,
         filter: 'includes',
       },
@@ -56,6 +61,7 @@ const initialColumnDefinition = [
         Header: 'Profile Progress',
         accessor: 'progress',
         show: true,
+        order: 6,
         Filter: SliderColumnFilter,
         filter: filterGreaterThan,
       },
@@ -128,7 +134,9 @@ function App() {
     <Styles>
       <>
         <h1>Demo of React Table</h1>
+        <h3>Select and order fields</h3>
         <ColumnSelector columnDefinition={columnDefinition} setColumnDefinition = {setColumnDefinition} />
+        <h3>Data</h3>
         <Table columns={columns} data={data} />
       </>
     </Styles>

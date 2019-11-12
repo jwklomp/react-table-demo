@@ -45,8 +45,6 @@ const Table = ({ columns, data }) => {
         nextPage,
         previousPage,
         setPageSize,
-        flatColumns,
-        setColumnOrder,
         prepareRow,
         state: { pageIndex, pageSize },
     } = useTable(
@@ -57,7 +55,6 @@ const Table = ({ columns, data }) => {
             filterTypes,
             initialState: { pageIndex: 0 }
         },
-        useColumnOrder,
         useFilters,
         useSortBy,
         usePagination,

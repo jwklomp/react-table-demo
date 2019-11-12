@@ -2,22 +2,32 @@ import React from 'react'
 
 const ColumnSelector = ({ columnDefinition, setColumnDefinition }) => {
 
-    const adaptHeader = (headerToFind, value, colDef) => colDef.reduce((acc, field) => {
-        if (field.hasOwnProperty('columns') ) {
-            adaptHeader(headerToFind, value, field.columns)
+    const adaptShowField = (headerToFind, value, colDef) => colDef.reduce((acc, field) => {
+        if (field.hasOwnProperty('columns')) {
+            adaptShowField(headerToFind, value, field.columns)
         }
         if (field.hasOwnProperty('Header') && field.Header === headerToFind) {
             field.show = value
-        } 
-        return acc.concat(field) 
+        }
+        return acc.concat(field)
     }, [])
 
-    const handleChange = (Header, event) => {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        setColumnDefinition(adaptHeader(Header, value, columnDefinition))
-      }
+    const adaptOrder = (headerToFind, value, colDef) => colDef.reduce((acc, field) => {
+        if (field.hasOwnProperty('columns')) {
+            adaptOrder(headerToFind, value, field.columns)
+            field.columns.sort((a, b) => (a.order > b.order) ? 1 : -1)
+        }
+        if (field.hasOwnProperty('Header') && field.hasOwnProperty('order') && field.Header === headerToFind) {
+            field.order = value
+        }
+        return acc.concat(field)
+    }, [])
 
+    const handleShowChange = (Header, event) => 
+        setColumnDefinition(adaptShowField(Header, event.target.checked, columnDefinition))
+
+    const handleOrderChange = (Header, event) => 
+        setColumnDefinition(adaptOrder(Header, event.target.value, columnDefinition))    
 
     const makeField = field => {
         return (
@@ -27,7 +37,16 @@ const ColumnSelector = ({ columnDefinition, setColumnDefinition }) => {
                     name="show"
                     type="checkbox"
                     checked={field.show}
-                    onChange={e => handleChange(field.Header, e)} /></td>
+                    onChange={e => handleShowChange(field.Header, e)} /></td>
+                {field.order ?
+                    <td>
+                        <input
+                            name="show"
+                            type="number"
+                            value={field.order}
+                            onChange={e => handleOrderChange(field.Header, e)} />
+                    </td> :
+                    <td></td>}
             </tr>
         )
     }
