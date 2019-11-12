@@ -13,7 +13,6 @@ const ColumnSelector = ({ columnDefinition, setColumnDefinition }) => {
     }, [])
 
     const handleChange = (Header, event) => {
-
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         setColumnDefinition(adaptHeader(Header, value, columnDefinition))

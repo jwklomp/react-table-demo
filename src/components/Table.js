@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTable, useFilters, useSortBy, usePagination, useBlockLayout, useResizeColumns } from 'react-table'
+import { useColumnOrder, useTable, useFilters, useSortBy, usePagination, useBlockLayout, useResizeColumns } from 'react-table'
 import DefaultColumnFilter from './DefaultColumnFilter'
 import { fuzzyTextFilterFn } from '../utils/filterUtils'
 import Pagination from './Pagination'
@@ -7,10 +7,7 @@ import Pagination from './Pagination'
 const Table = ({ columns, data }) => {
     const filterTypes = React.useMemo(
         () => ({
-            // Add a new fuzzyTextFilterFn filter type.
             fuzzyText: fuzzyTextFilterFn,
-            // Or, override the default text filter to use
-            // "startWith"
             text: (rows, id, filterValue) => {
                 return rows.filter(row => {
                     const rowValue = row.values[id]
@@ -48,6 +45,8 @@ const Table = ({ columns, data }) => {
         nextPage,
         previousPage,
         setPageSize,
+        flatColumns,
+        setColumnOrder,
         prepareRow,
         state: { pageIndex, pageSize },
     } = useTable(
@@ -58,6 +57,7 @@ const Table = ({ columns, data }) => {
             filterTypes,
             initialState: { pageIndex: 0 }
         },
+        useColumnOrder,
         useFilters,
         useSortBy,
         usePagination,
