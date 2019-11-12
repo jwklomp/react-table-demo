@@ -1,20 +1,72 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import SelectColumnFilter from './components/SelectColumnFilter'
 import SliderColumnFilter from './components/SliderColumnFilter'
+import ColumnSelector from './components/ColumnSelector'
 import NumberRangeColumnFilter from './components/NumberRangeColumnFilter'
 import Table from './components/Table'
 import { filterGreaterThan } from './utils/filterUtils'
-
-// A great library for fuzzy filtering/sorting items
-
 import makeData from './utils/makeData'
+
+const initialColumnDefinition = [
+  {
+    Header: 'Name',
+    show: true,
+    columns: [
+      {
+        Header: 'First Name',
+        accessor: 'firstName',
+        show: true,
+      },
+      {
+        Header: 'Last Name',
+        show: true,
+        accessor: 'lastName',
+        // Use our custom `fuzzyText` filter on this column
+        filter: 'fuzzyText',
+      },
+    ],
+  },
+  {
+    Header: 'Info',
+    show: true,
+    columns: [
+      {
+        Header: 'Age',
+        accessor: 'age',
+        show: true,
+        Filter: SliderColumnFilter,
+        filter: 'equals',
+      },
+      {
+        Header: 'Visits',
+        accessor: 'visits',
+        show: true,
+        Filter: NumberRangeColumnFilter,
+        filter: 'between',
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        show: true,
+        Filter: SelectColumnFilter,
+        filter: 'includes',
+      },
+      {
+        Header: 'Profile Progress',
+        accessor: 'progress',
+        show: true,
+        Filter: SliderColumnFilter,
+        filter: filterGreaterThan,
+      },
+    ],
+  },
+]
 
 const Styles = styled.div`
   padding: 1rem;
 
   table {
-    display: inline-block;
     border-spacing: 0;
     border: 1px solid black;
 
@@ -62,54 +114,12 @@ const Styles = styled.div`
 `
 
 function App() {
+
+  const [columnDefinition, setColumnDefinition] = useState(initialColumnDefinition);
+
   const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Name',
-        columns: [
-          {
-            Header: 'First Name',
-            accessor: 'firstName',
-          },
-          {
-            Header: 'Last Name',
-            accessor: 'lastName',
-            // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
-          },
-        ],
-      },
-      {
-        Header: 'Info',
-        columns: [
-          {
-            Header: 'Age',
-            accessor: 'age',
-            Filter: SliderColumnFilter,
-            filter: 'equals',
-          },
-          {
-            Header: 'Visits',
-            accessor: 'visits',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-          },
-          {
-            Header: 'Status',
-            accessor: 'status',
-            Filter: SelectColumnFilter,
-            filter: 'includes',
-          },
-          {
-            Header: 'Profile Progress',
-            accessor: 'progress',
-            Filter: SliderColumnFilter,
-            filter: filterGreaterThan,
-          },
-        ],
-      },
-    ],
-    []
+    () => columnDefinition,
+    [columnDefinition]
   )
 
   const data = React.useMemo(() => makeData(10000), [])
@@ -117,8 +127,9 @@ function App() {
   return (
     <Styles>
       <>
-      <h1>Demo of React Table</h1>
-      <Table columns={columns} data={data} />
+        <h1>Demo of React Table</h1>
+        <ColumnSelector columnDefinition={columnDefinition} setColumnDefinition = {setColumnDefinition} />
+        <Table columns={columns} data={data} />
       </>
     </Styles>
   )

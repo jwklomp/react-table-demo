@@ -4,7 +4,6 @@ import DefaultColumnFilter from './DefaultColumnFilter'
 import { fuzzyTextFilterFn } from '../utils/filterUtils'
 import Pagination from './Pagination'
 
-// Our table component
 const Table = ({ columns, data }) => {
     const filterTypes = React.useMemo(
         () => ({
