@@ -71,13 +71,13 @@ const Table = ({ columns, data }) => {
   );
 
   return (
-    <>
-      <table {...getTableProps()}>
+    <div className={"table-responsive"}>
+      <table {...getTableProps()} className={"table table-striped table-bordered"}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())} scope={"col"}>
                   {column.render("Header")}
                   {/* Render the columns filter UI */}
                   <div
@@ -127,7 +127,7 @@ const Table = ({ columns, data }) => {
         setPageSize={setPageSize}
         canPreviousPage={canPreviousPage}
       />
-    </>
+    </div>
   );
 };
 
