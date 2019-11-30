@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  useColumnOrder,
   useTable,
   useFilters,
   useSortBy,
